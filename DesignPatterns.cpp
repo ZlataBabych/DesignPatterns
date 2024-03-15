@@ -6,6 +6,7 @@ Design Patterns in C++
 #include <iostream>
 #include<string>
 using namespace std;
+using namespace Builder;
 
 namespace FactoryMethod{
 /*"Фабричный метод (FactoryMethod)".
@@ -70,6 +71,122 @@ ICompany* fordCompany = new CarCompany;
     newCar1->create();
     newCar2->create();*/
 }
+
+/*"Строитель (Builder)".
+пример порождающего шаблона проектирования программ «Строитель», 
+который предоставляет способ создания составного объекта. 
+Он отделяет конструирование сложного объекта от его представления так, 
+что в результате одного и того же процесса конструирования 
+могут получаться разные представления.*/
+
+namespace Builder {
+    class Phone {
+        string data;
+    public:
+        Phone() {
+            data = "";
+        }
+
+        string getData() {
+            return data;
+        }
+
+        void appendData(string str) {
+            data += str;
+        }
+    };
+
+    class IDeveloper {
+    public:
+        virtual void createDisplay() = 0;
+        virtual void createBox() = 0;
+        virtual void systemInstall() = 0;
+
+        virtual Phone* getPhone() = 0;
+    };
+
+    class AndroidDeveloper : public IDeveloper {
+        Phone* phone;
+    public:
+        AndroidDeveloper() {
+            phone = new Phone();
+        }
+
+        virtual ~AndroidDeveloper() {
+            delete phone;
+        }
+
+         void createDisplay() override {
+            phone->appendData("create display Samsung; ");
+        }
+
+         void createBox() override {
+            phone->appendData("create corpus (box) Samsung; ");
+        }
+
+         void systemInstall() override {
+            phone->appendData("install system Android; ");
+        }
+
+         Phone* getPhone() override {
+            return phone;
+        }
+    };
+
+    class IPhoneDeveloper : public IDeveloper {
+        Phone* phone;
+    public:
+        IPhoneDeveloper() {
+            phone = new Phone();
+        }
+
+         ~IPhoneDeveloper() {
+            delete phone;
+        }
+
+         void createDisplay() override {
+            phone->appendData("create display Apple; ");
+        }
+
+         void createBox() override {
+            phone->appendData("create corpus (box) Apple; ");
+        }
+
+         void systemInstall() override {
+            phone->appendData("install system IOS; ");
+        }
+
+         Phone* getPhone() {
+            return phone;
+        }
+    };
+
+    class Director {
+        IDeveloper* developer;
+    public:
+        Director(IDeveloper* devel): developer(devel) {}
+
+        void setDeveloper(IDeveloper* devel) {
+            developer = devel;
+        }
+
+        Phone* onlyPhone() {
+            developer->createBox();
+            developer->createDisplay();
+            return developer->getPhone();
+        }
+
+        Phone* fullPhone() {
+            developer->createBox();
+            developer->createDisplay();
+            developer->systemInstall();
+            return developer->getPhone();
+        }
+
+    };
+}
+
+
 
 int main()
 {
