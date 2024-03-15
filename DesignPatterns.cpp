@@ -1,18 +1,79 @@
-﻿
+﻿/*
+Zlata Babych
+Design Patterns in C++
+*/
+
 #include <iostream>
+#include<string>
+using namespace std;
+
+namespace FactoryMethod{
+/*"Фабричный метод (FactoryMethod)".
+пример порождающего шаблона проектирования программ «Фабричный метод», 
+который предоставляет дочерним классам интерфейс 
+для создания экземпляров некоторого класса. 
+В момент создания наследники могут определить какой класс создавать. 
+Это позволяет использовать в коде программы неспецифические классы, 
+а манипулировать абстрактными объектами на более высоком уровне.*/
+
+class IProduct {
+public:
+    virtual void create() = 0;
+};
+
+class Car: public IProduct {
+public:
+    void create() override {
+        cout << " New Car " << endl;
+    }
+};
+
+class Ship : public IProduct {
+public:
+    void create() override {
+        cout << " New Ship " << endl;
+    }
+};
+
+class ICompany {
+public:
+    virtual IProduct* create() = 0;
+};
+
+class CarCompany: public ICompany {
+public:
+    IProduct* create() override {
+        return new Car;
+    }
+};
+
+class ShipCompany : public ICompany {
+public:
+    IProduct* create() override {
+        return new Ship;
+    }
+};
+
+
+/*main:
+ICompany* fordCompany = new CarCompany;
+    IProduct* newCar1 = fordCompany->create();
+    newCar1->create();
+    IProduct* newCar2 = fordCompany->create();
+    newCar2->create();
+    delete fordCompany;
+
+    fordCompany = new ShipCompany;
+    IProduct* newShip1 = fordCompany->create();
+    newShip1->create();
+
+    newCar1->create();
+    newCar2->create();*/
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    
+    return 0;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
